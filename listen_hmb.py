@@ -7,6 +7,7 @@ import getpass
 import logging
 from argparse import ArgumentParser
 from multiprocessing import Queue, Process
+import queue as pyqueue
 
 from emschmb import EmscHmbListener, load_hmbcfg
 
@@ -16,7 +17,7 @@ from emschmb import EmscHmbListener, load_hmbcfg
 # for example
 from my_processing import process_message
 
-__version__ = '1.01'
+__version__ = '1.02'
 
 
 def _process_wrapper(p, msg, tag):
@@ -44,7 +45,14 @@ def shellprocess_manager_multithread(hmb, maxprocess=3):
             time.sleep(1)
             continue
 
-        msg = process_queue.get()
+        try:
+            msg = process_queue.get_nowait()
+        except pyqueue.Empty:
+            if not hmbthread.is_alive():
+                break
+            else:
+                continue
+
         try:
             tag = 'Process_{0}'.format(local_pid)
             p = Process(name=tag, target=_process_wrapper, args=(process_message, msg, tag))
@@ -68,7 +76,14 @@ def shellprocess_manager_singlethread(hmb):
 
     while True:
 
-        msg = process_queue.get()
+        try:
+            msg = process_queue.get_nowait()
+        except pyqueue.Empty:
+            if not hmbthread.is_alive():
+                break
+            else:
+                continue
+
         tick = time.time()
         try:
             process_message(msg)
@@ -82,6 +97,7 @@ def shellprocess_manager_singlethread(hmb):
 def shellprocess_manager_nothread(hmb):
     logging.debug('Begin hmb listener...')
     hmb.listen(process_message)
+    logging.debug('End hmb listener...')
 
 
 def launch_hmb(pqueue, hmbsession):
@@ -91,6 +107,7 @@ def launch_hmb(pqueue, hmbsession):
 
     logging.debug('Begin hmb listener...')
     hmbsession.listen(_process_closure)
+    logging.debug('End hmb listener...')
 
 
 if __name__ == '__main__':
