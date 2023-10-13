@@ -119,9 +119,9 @@ if __name__ == '__main__':
     argd.add_argument('--queue', help='define the queue to listen')
     argd.add_argument('--user', help='connexion authentication')
     argd.add_argument('--password', help='connexion authentication')
-    argd.add_argument('--nthreads', help='number of concurrent running threads', type=int, default=3)
-    argd.add_argument('--singlethread', help='force single thread running (useful for debugging)', action='store_true')
-    argd.add_argument('--nothread', help='force no threading (useful for debugging)', action='store_true')
+    argd.add_argument('-n', '--nthreads', help='number of concurrent running threads', type=int, default=1)
+    argd.add_argument('--singlethread', help='force single thread running (n=1)', action='store_true')
+    argd.add_argument('--nothread', help='force no threading (n=0, useful for debugging)', action='store_true')
     argd.add_argument('-v', '--verbose', action='store_true')
 
     args = argd.parse_args()
@@ -172,11 +172,18 @@ if __name__ == '__main__':
     hmb.queue(*queue, nlast=args.nlast)
 
     if args.nothread:
+        nthreads = 0
+    elif args.singlethread:
+        nthreads = 1
+    else:
+        nthreads = args.nthreads
+
+    if nthreads == 0:
         logging.info('No thread processing')
         shellprocess_manager_nothread(hmb)
-    elif args.singlethread:
+    elif nthreads == 1:
         logging.info('Single thread processing')
         shellprocess_manager_singlethread(hmb)
     else:
-        logging.info('Multi threads processing (%d process(es))', args.nthreads)
-        shellprocess_manager_multithread(hmb, maxprocess=args.nthreads)
+        logging.info('Multi threads processing (%d process(es))', nthreads)
+        shellprocess_manager_multithread(hmb, maxprocess=nthreads)
