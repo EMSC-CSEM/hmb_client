@@ -14,6 +14,7 @@ from emschmb import EmscHmbListener, load_hmbcfg, readstdin
 # for example
 from my_processing import process_message
 
+
 __version__ = '1.0'
 
 

@@ -174,7 +174,7 @@ One example to select message with the sequence number 8210:
 from emschmb import EmscHmbPublisher
 
 agency = 'TOTO'
-url = 'http://cerf/emsc-csem.org/hmbtest
+url = 'http://cerf.emsc-csem.org/hmbtest'
 user = ??
 password = ??
 
@@ -186,7 +186,9 @@ queue = TEST
 # For instance
 
 metadata = {
-  'evid': EMSC_EVENT_IDENTIFIER
+  'eventid': EVENT_IDENTIFIER,
+  'deleted': 1_OR_0,
+  'datatype': 'mt'_OR_'origin'  # only if the datatype need to be specify 
 }
 
 hmb = EmscHmbPublisher(agency, url)
