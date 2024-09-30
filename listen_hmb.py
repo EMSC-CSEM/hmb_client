@@ -17,7 +17,7 @@ from emschmb import EmscHmbListener, load_hmbcfg
 # for example
 from my_processing import process_message
 
-__version__ = '1.02'
+__version__ = '1.03'
 
 
 def _process_wrapper(p, msg, tag):
