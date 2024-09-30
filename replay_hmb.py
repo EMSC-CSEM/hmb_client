@@ -42,8 +42,8 @@ if __name__ == '__main__':
         format='%(asctime)s:%(levelname)s:%(name)s:%(message)s')
     logging.info('Replay HMB message (%s)', __version__)
 
-    filter = json.loads(args.query or ''.join(readstdin()))
-    logging.info('Filtering query: %s', filter)
+    filter_query = json.loads(args.query or ''.join(readstdin()))
+    logging.info('Filtering query: %s', filter_query)
 
     if args.cfg is not None:
         cfg = load_hmbcfg(args.cfg)
@@ -80,4 +80,4 @@ if __name__ == '__main__':
         logging.info('Use authentication')
         hmb.authentication(user, password)
 
-    hmb.get(display if args.check else process_message, queue, filter)
+    hmb.get(display if args.check else process_message, queue, filter_query)

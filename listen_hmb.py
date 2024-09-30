@@ -37,6 +37,7 @@ def shellprocess_manager_multithread(hmb, maxprocess=3):
     local_pid = 1
     running_processes = []
     while True:
+        time.sleep(0.01)
 
         check_running_processes = [p for p in running_processes if p.is_alive() is True]
 
@@ -75,6 +76,7 @@ def shellprocess_manager_singlethread(hmb):
     hmbthread.start()
 
     while True:
+        time.sleep(0.01)
 
         try:
             msg = process_queue.get_nowait()
