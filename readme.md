@@ -1,4 +1,9 @@
 
+**License**
+
+This project is licensed under the GNU GPL v3 License - see the LICENSE file for details.
+
+
 # How exchange data via HMB?
 
 HMB is a messaging protocol developped by GFZ [(link)](https://geofon.gfz-potsdam.de/software/httpmsgbus/) allowing the exchange of data on the port 80. To easiest the set up, we have developped some utilities in python. Depending if you want to send or to receive data, you have to use, respectively, a the HMB publisher or the HMB listener.
